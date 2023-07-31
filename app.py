@@ -37,7 +37,7 @@ if "agent" not in st.session_state:
     st.session_state.agent = create_agent()
 
 
-st.title("langchain-book-streamlit-app v2")
+st.title("langchain-book-streamlit-app")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
