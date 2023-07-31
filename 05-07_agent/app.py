@@ -20,7 +20,7 @@ def create_agent():
     return initialize_agent(tools, chat, agent=AgentType.OPENAI_FUNCTIONS)
 
 
-st.title("langchain-book-streamlit-app")
+st.title("langchain-streamlit-app")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []

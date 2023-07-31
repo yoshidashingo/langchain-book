@@ -1,6 +1,6 @@
 import streamlit as st
 
-st.title("langchain-book-streamlit-app")
+st.title("langchain-streamlit-app")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
