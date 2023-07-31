@@ -2,7 +2,9 @@ import streamlit as st
 
 st.title("langchain-streamlit-app")
 
-if prompt := st.chat_input("What is up?"):
+prompt = st.chat_input("What is up?")
+
+if prompt:
     with st.chat_message("user"):
         st.markdown(prompt)
 
