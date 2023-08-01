@@ -33,7 +33,7 @@ def create_agent_chain():
     )
 
 
-if "agent" not in st.session_state:
+if "agent_chain" not in st.session_state:
     st.session_state.agent_chain = create_agent_chain()
 
 
