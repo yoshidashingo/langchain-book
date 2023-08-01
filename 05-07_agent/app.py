@@ -9,7 +9,7 @@ from langchain.chat_models import ChatOpenAI
 load_dotenv()
 
 
-def create_agent():
+def create_agent_chain():
     chat = ChatOpenAI(
         model_name=os.environ["OPENAI_API_MODEL"],
         temperature=os.environ["OPENAI_API_TEMPERATURE"],
@@ -38,8 +38,8 @@ if prompt:
 
     with st.chat_message("assistant"):
         callback = StreamlitCallbackHandler(st.container())
-        agent = create_agent()
-        response = agent.run(prompt, callbacks=[callback])
+        agent_chain = create_agent_chain()
+        response = agent_chain.run(prompt, callbacks=[callback])
         st.markdown(response)
 
     st.session_state.messages.append({"role": "assistant", "content": response})
