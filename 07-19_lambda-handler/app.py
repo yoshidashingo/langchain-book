@@ -6,6 +6,8 @@ import langchain
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import LLMResult
+from typing import Any
+import time
 from langchain.memory import MomentoChatMessageHistory
 from datetime import timedelta
 from langchain.schema import (
@@ -15,6 +17,8 @@ from langchain.schema import (
 import json
 import logging
 from slack_bolt.adapter.aws_lambda import SlackRequestHandler
+
+CHAT_UPDATE_INTERVAL_SEC = 1
 
 load_dotenv()
 

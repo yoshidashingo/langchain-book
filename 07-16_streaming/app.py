@@ -6,6 +6,10 @@ import langchain
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import LLMResult
+from typing import Any
+import time
+
+CHAT_UPDATE_INTERVAL_SEC = 1
 
 load_dotenv()
 
