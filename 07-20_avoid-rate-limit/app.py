@@ -44,7 +44,7 @@ class SlackStreamingCallbackHandler(BaseCallbackHandler):
     last_send_time = time.time()
     message = ""
 
-   def __init__(self, channel, ts, id_ts):
+    def __init__(self, channel, ts, id_ts):
         self.channel = channel
         self.ts = ts
         self.id_ts = id_ts
