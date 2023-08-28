@@ -134,7 +134,7 @@ def handler(event, context):
     if "x-slack-retry-num" in header:
         logger.info("SKIP > x-slack-retry-num: " + header["x-slack-retry-num"])
         return 200
- 
+
     # AWS Lambda 環境のリクエスト情報を app が処理できるよう変換してくれるアダプター
     slack_handler = SlackRequestHandler(app=app)
     # 応答はそのまま AWS Lambda の戻り値として返せます
