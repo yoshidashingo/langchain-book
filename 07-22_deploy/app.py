@@ -1,25 +1,23 @@
 import os
-
-import json
-import logging
-from slack_bolt.adapter.aws_lambda import SlackRequestHandler
-
-import openai
 from dotenv import load_dotenv
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
-from typing import Any
-import time
+import openai
 import langchain
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import LLMResult
+from typing import Any
+import time
 from langchain.memory import MomentoChatMessageHistory
 from datetime import timedelta
 from langchain.schema import (
     HumanMessage,
     SystemMessage
 )
+import json
+import logging
+from slack_bolt.adapter.aws_lambda import SlackRequestHandler
 
 CHAT_UPDATE_INTERVAL_SEC = 1
 
