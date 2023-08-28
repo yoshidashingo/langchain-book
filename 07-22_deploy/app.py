@@ -69,7 +69,6 @@ class SlackStreamingCallbackHandler(BaseCallbackHandler):
             if self.update_count/10 > self.interval:
                 self.interval = self.interval*2
 
-
     def on_llm_end(self, response: LLMResult, **kwargs: Any) -> Any:
         add_ai_message(self.id_ts, self.message)
         message_context = "OpenAI APIで生成される情報は不正確または不適切な場合がありますが、当社の見解を述べるものではありません。"
