@@ -1,0 +1,95 @@
+import os
+from dotenv import load_dotenv
+from slack_bolt import App
+from slack_bolt.adapter.socket_mode import SocketModeHandler
+import langchain
+from langchain.callbacks.base import BaseCallbackHandler
+from langchain.chat_models import ChatOpenAI
+from langchain.schema import LLMResult
+from langchain.memory import MomentoChatMessageHistory
+from datetime import timedelta
+from langchain.schema import (
+    HumanMessage,
+    SystemMessage
+)
+
+load_dotenv()
+
+# ボットトークンとソケットモードハンドラーを使ってアプリを初期化します
+app = App(
+    signing_secret=os.environ["SLACK_SIGNING_SECRET"],
+    token=os.environ["SLACK_BOT_TOKEN"],
+    process_before_response=True,
+)
+
+
+class SlackStreamingCallbackHandler(BaseCallbackHandler):
+    last_send_time = time.time()
+    message = ""
+
+    def __init__(self, channel, ts, id_ts):
+        self.channel = channel
+        self.ts = ts
+        self.id_ts = id_ts
+        self.interval = CHAT_UPDATE_INTERVAL_SEC
+        self.update_count = 0
+
+    def on_llm_new_token(self, token: str, **kwargs) -> None:
+        self.message += token
+
+        now = time.time()
+        if now - self.last_send_time > CHAT_UPDATE_INTERVAL_SEC:
+            self.last_send_time = now
+            app.client.chat_update(
+                channel=self.channel, ts=self.ts, text=f"{self.message}..."
+            )
+
+    def on_llm_end(self, response: LLMResult, **kwargs: Any) -> Any:
+        add_ai_message(self.id_ts, self.message)
+        app.client.chat_update(channel=self.channel, ts=self.ts, text=self.message)
+
+
+@app.event("app_mention")
+def handle_mention(event, say):
+    channel = event["channel"]
+    thread_ts = event["ts"]
+    message = re.sub('<@.*>',"",event["text"])
+
+    llm = ChatOpenAI(
+        model_name=os.environ["OPENAI_API_MODEL"],
+        temperature=os.environ["OPENAI_API_TEMPERATURE"],
+        streaming=True,
+    )
+
+    # 投稿の先頭(=Momentoキー)を示す：初回はevent["ts"],2回目以降はevent["thread_ts"]
+    id_ts = event["ts"]
+    if "thread_ts" in event:
+        id_ts = event["thread_ts"]
+
+    history = MomentoChatMessageHistory.from_client_params(
+        id_ts,
+        os.environ["MOMENTO_CACHE"],
+        timedelta(hours=int(os.environ["MOMENTO_TTL"])),
+    )
+
+    messages = [
+        SystemMessage(content="You are a good assistant.")
+    ]
+    cached_messages = history.messages
+    # 履歴があったらチャット用に読み出す
+    if cached_messages:
+        list(map(lambda i: messages.append(i), cached_messages))
+    # ユーザーからの入力文をチャットに追加する
+    messages.append(HumanMessage(content=message))
+    # ユーザーからの入力文を記憶に追加する
+    history.add_user_message(message)
+
+    result = say("\n\nTyping...", thread_ts=thread_ts)
+    ts = result["ts"]
+
+    callback = SlackStreamingCallbackHandler(channel=channel, ts=ts, id_ts=id_ts)
+    llm(messages, callbacks=[callback])
+
+# アプリを起動します
+if __name__ == "__main__":
+    SocketModeHandler(app, os.environ["SLACK_APP_TOKEN"]).start()
