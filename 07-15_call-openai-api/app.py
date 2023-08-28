@@ -2,8 +2,11 @@ import os
 from dotenv import load_dotenv
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
+import openai
 
 load_dotenv()
+
+openai.api_key = os.environ["OPENAI_API_KEY"]
 
 # ボットトークンとソケットモードハンドラーを使ってアプリを初期化します
 app = App(token=os.environ.get("SLACK_BOT_TOKEN"))

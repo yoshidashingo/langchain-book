@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
+import openai
 import langchain
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.chat_models import ChatOpenAI
@@ -12,6 +13,8 @@ import time
 CHAT_UPDATE_INTERVAL_SEC = 1
 
 load_dotenv()
+
+openai.api_key = os.environ["OPENAI_API_KEY"]
 
 # ボットトークンとソケットモードハンドラーを使ってアプリを初期化します
 app = App(
