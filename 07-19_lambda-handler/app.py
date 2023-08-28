@@ -70,7 +70,7 @@ class SlackStreamingCallbackHandler(BaseCallbackHandler):
 def handle_mention(event, say):
     channel = event["channel"]
     thread_ts = event["ts"]
-    message = re.sub('<@.*>',"",event["text"])
+    message = event["text"]
 
     llm = ChatOpenAI(
         model_name=os.environ["OPENAI_API_MODEL"],
