@@ -90,7 +90,7 @@ def handle_mention(event, say):
     llm = ChatOpenAI(
         model_name=os.environ["OPENAI_API_MODEL"],
         temperature=os.environ["OPENAI_API_TEMPERATURE"],
-        streaming=True
+        streaming=True,
     )
 
     # 投稿の先頭(=Momentoキー)を示す：初回はevent["ts"],2回目以降はevent["thread_ts"]
