@@ -90,6 +90,16 @@ def handle_mention(event, say):
     callback = SlackStreamingCallbackHandler(channel=channel, ts=ts, id_ts=id_ts)
     llm(messages, callbacks=[callback])
 
+
+def add_ai_message(thread_ts, ai_message):
+    history = MomentoChatMessageHistory.from_client_params(
+        thread_ts,
+        os.environ["MOMENTO_CACHE"],
+        timedelta(hours=1),
+    )
+    history.add_ai_message(ai_message)
+
+
 # アプリを起動します
 if __name__ == "__main__":
     SocketModeHandler(app, os.environ["SLACK_APP_TOKEN"]).start()
