@@ -104,7 +104,7 @@ def handle_mention(event, say):
     cached_messages = history.messages
     # 履歴があったらチャット用に読み出す
     if cached_messages:
-        list(map(lambda i: messages.append(i), cached_messages))
+        messages += cached_messages
     # ユーザーからの入力文をチャットに追加する
     messages.append(HumanMessage(content=message))
     # ユーザーからの入力文を記憶に追加する
@@ -144,7 +144,7 @@ def handler(event, context):
     logger.info(json.dumps(header))
 
     if "x-slack-retry-num" in header:
-        logger.info("SKIP > x-slack-retry-num: " + header["x-slack-retry-num"])
+        logger.info("SKIP > x-slack-retry-num: %s", header["x-slack-retry-num"])
         return 200
 
     # AWS Lambda 環境のリクエスト情報を app が処理できるよう変換してくれるアダプター
