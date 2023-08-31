@@ -66,18 +66,14 @@ class SlackStreamingCallbackHandler(BaseCallbackHandler):
     def on_llm_end(self, response: LLMResult, **kwargs: Any) -> Any:
         add_ai_message(self.id_ts, self.message)
         message_context = "OpenAI APIで生成される情報は不正確または不適切な場合がありますが、当社の見解を述べるものではありません。"
-        message_blocks = (
-            '''[
-            {"type": "section", "text": {"type": "mrkdwn", "text": "'''
-            + self.message
-            + '''"}},
+        message_blocks = [
+            {"type": "section", "text": {"type": "mrkdwn", "text": self.message}},
             {"type": "divider"},
-            {"type": "context","elements": [{"type": "mrkdwn","text": "'''
-            + message_context
-            + """"}]}
-            ]
-        """
-        )
+            {
+                "type": "context",
+                "elements": [{"type": "mrkdwn", "text": message_context}],
+            },
+        ]
         app.client.chat_update(channel=self.channel, ts=self.ts, blocks=message_blocks)
 
 
