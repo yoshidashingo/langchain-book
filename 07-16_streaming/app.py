@@ -1,20 +1,18 @@
 import os
+import re
+import time
+from typing import Any
+
 from dotenv import load_dotenv
-from slack_bolt import App
-from slack_bolt.adapter.socket_mode import SocketModeHandler
-import openai
-import langchain
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import LLMResult
-from typing import Any
-import time
+from slack_bolt import App
+from slack_bolt.adapter.socket_mode import SocketModeHandler
 
 CHAT_UPDATE_INTERVAL_SEC = 1
 
 load_dotenv()
-
-openai.api_key = os.environ["OPENAI_API_KEY"]
 
 # ボットトークンとソケットモードハンドラーを使ってアプリを初期化します
 app = App(
@@ -50,19 +48,21 @@ class SlackStreamingCallbackHandler(BaseCallbackHandler):
 def handle_mention(event, say):
     channel = event["channel"]
     thread_ts = event["ts"]
-    message = event["text"]
-
-    llm = ChatOpenAI(
-        model_name=os.environ["OPENAI_API_MODEL"],
-        temperature=os.environ["OPENAI_API_TEMPERATURE"],
-        streaming=True
-    )
+    message = re.sub("<@.*>", "", event["text"])
 
     result = say("\n\nTyping...", thread_ts=thread_ts)
     ts = result["ts"]
 
     callback = SlackStreamingCallbackHandler(channel=channel, ts=ts)
-    llm.predict(message, callbacks=[callback])
+    llm = ChatOpenAI(
+        model_name=os.environ["OPENAI_API_MODEL"],
+        temperature=os.environ["OPENAI_API_TEMPERATURE"],
+        streaming=True,
+        callbacks=[callback],
+    )
+
+    llm.predict(message)
+
 
 # アプリを起動します
 if __name__ == "__main__":
