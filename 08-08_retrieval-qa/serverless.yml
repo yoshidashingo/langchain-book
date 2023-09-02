@@ -23,7 +23,7 @@ package:
 
 functions:
   app:
-    name: ChatGPTSlackFunction8-${sls:stage}-app
+    name: LangChainBook-ChatGPTSlackFunction-${sls:stage}-app
     handler: app.handler
     runtime: python3.10
     memorySize: 512

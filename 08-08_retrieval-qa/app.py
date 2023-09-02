@@ -1,33 +1,25 @@
 import json
 import logging
 import os
+import re
 import time
+from datetime import timedelta
 from typing import Any
 
-import openai
+from add_document import initialize_vectorstore
 from dotenv import load_dotenv
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.chains import RetrievalQA
 from langchain.chat_models import ChatOpenAI
-from langchain.schema import LLMResult
+from langchain.memory import MomentoChatMessageHistory
+from langchain.schema import HumanMessage, LLMResult, SystemMessage
 from slack_bolt import App
 from slack_bolt.adapter.aws_lambda import SlackRequestHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
-from add_document import initialize_vectorstore
-
 CHAT_UPDATE_INTERVAL_SEC = 1
 
 load_dotenv()
-
-openai.api_key = os.environ["OPENAI_API_KEY"]
-
-# ボットトークンとソケットモードハンドラーを使ってアプリを初期化します
-app = App(
-    signing_secret=os.environ["SLACK_SIGNING_SECRET"],
-    token=os.environ["SLACK_BOT_TOKEN"],
-    process_before_response=True,
-)
 
 # ログ
 SlackRequestHandler.clear_all_log_handlers()
@@ -35,6 +27,13 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s] %(message)s", level=logging.INFO
 )
 logger = logging.getLogger(__name__)
+
+# ボットトークンとソケットモードハンドラーを使ってアプリを初期化します
+app = App(
+    signing_secret=os.environ["SLACK_SIGNING_SECRET"],
+    token=os.environ["SLACK_BOT_TOKEN"],
+    process_before_response=True,
+)
 
 
 class SlackStreamingCallbackHandler(BaseCallbackHandler):
@@ -66,28 +65,26 @@ class SlackStreamingCallbackHandler(BaseCallbackHandler):
 
     def on_llm_end(self, response: LLMResult, **kwargs: Any) -> Any:
         message_context = "OpenAI APIで生成される情報は不正確または不適切な場合がありますが、当社の見解を述べるものではありません。"
-        message_blocks = (
-            '''[
-            {"type": "section", "text": {"type": "mrkdwn", "text": "'''
-            + self.message
-            + '''"}},
+        message_blocks = [
+            {"type": "section", "text": {"type": "mrkdwn", "text": self.message}},
             {"type": "divider"},
-            {"type": "context","elements": [{"type": "mrkdwn","text": "'''
-            + message_context
-            + """"}]}
-            ]
-        """
+            {
+                "type": "context",
+                "elements": [{"type": "mrkdwn", "text": message_context}],
+            },
+        ]
+        app.client.chat_update(
+            channel=self.channel, ts=self.ts, text=self.message, blocks=message_blocks
         )
-        app.client.chat_update(channel=self.channel, ts=self.ts, blocks=message_blocks)
 
 
 # @app.event("app_mention")
 def handle_mention(event, say):
     channel = event["channel"]
     thread_ts = event["ts"]
-    message = event["text"]
+    message = re.sub("<@.*>", "", event["text"])
 
-    # 投稿の先頭(=Momentoキー)を示す：初回はevent["ts"],2回目以降はevent["thread_ts"]
+    # 投稿のキー(=Momentoキー)：初回=event["ts"],2回目以降=event["thread_ts"]
     id_ts = event["ts"]
     if "thread_ts" in event:
         id_ts = event["thread_ts"]
@@ -116,7 +113,6 @@ def just_ack(ack):
 
 app.event("app_mention")(ack=just_ack, lazy=[handle_mention])
 
-
 # アプリを起動します
 if __name__ == "__main__":
     SocketModeHandler(app, os.environ["SLACK_APP_TOKEN"]).start()
@@ -128,7 +124,7 @@ def handler(event, context):
     logger.info(json.dumps(header))
 
     if "x-slack-retry-num" in header:
-        logger.info("SKIP > x-slack-retry-num: " + header["x-slack-retry-num"])
+        logger.info("SKIP > x-slack-retry-num: %s", header["x-slack-retry-num"])
         return 200
 
     # AWS Lambda 環境のリクエスト情報を app が処理できるよう変換してくれるアダプター
