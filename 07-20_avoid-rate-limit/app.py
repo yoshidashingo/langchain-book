@@ -56,6 +56,7 @@ class SlackStreamingCallbackHandler(BaseCallbackHandler):
             )
             self.last_send_time = now
             self.update_count += 1
+
             # update_countが現在の更新間隔X10より多くなるたびに更新間隔を2倍にする
             if self.update_count / 10 > self.interval:
                 self.interval = self.interval * 2
