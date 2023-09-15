@@ -3,6 +3,7 @@ import re
 
 import openai
 from dotenv import load_dotenv
+from langchain.chat_models import ChatOpenAI
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
@@ -18,14 +19,14 @@ app = App(token=os.environ.get("SLACK_BOT_TOKEN"))
 def handle_mention(event, say):
     thread_ts = event["ts"]
     message = re.sub("<@.*>", "", event["text"])
-    response = openai.ChatCompletion.create(
-        model=os.environ["OPENAI_API_MODEL"],
-        messages=[
-            {"role": "user", "content": message},
-        ],
-        temperature=float(os.environ["OPENAI_API_TEMPERATURE"]),
+
+    llm = ChatOpenAI(
+        model_name=os.environ["OPENAI_API_MODEL"],
+        temperature=os.environ["OPENAI_API_TEMPERATURE"],
     )
-    say(thread_ts=thread_ts, text=response.choices[0]["message"]["content"].strip())
+
+    response = llm.predict(message)
+    say(text=response, thread_ts=thread_ts)
 
 
 # アプリを起動します
