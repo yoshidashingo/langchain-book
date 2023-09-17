@@ -74,7 +74,10 @@ class SlackStreamingCallbackHandler(BaseCallbackHandler):
             },
         ]
         app.client.chat_update(
-            channel=self.channel, ts=self.ts, text=self.message, blocks=message_blocks
+            channel=self.channel,
+            ts=self.ts,
+            text=self.message,
+            blocks=message_blocks,
         )
 
 
