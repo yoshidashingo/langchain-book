@@ -1,4 +1,4 @@
-# langchain-book
+# ChatGPT、LangChain によるチャットシステム構築［実践］入門
 
 「ChatGPT、LangChain によるチャットシステム構築［実践］入門」の GitHub リポジトリです。
 
@@ -13,6 +13,8 @@ https://www.amazon.co.jp/dp/4297138395
 | 第 5 章 LangChain の活用                  | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/yoshidashingo/langchain-book/blob/main/05/notebook.ipynb) |
 
 ## 動作確認環境
+
+本書のソースコードは以下の環境・バージョンで動作確認しました。
 
 | 章               | 環境                        | Python  | LangChain |
 | ---------------- | --------------------------- | ------- | --------- |
