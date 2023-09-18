@@ -21,4 +21,10 @@ https://www.amazon.co.jp/dp/4297138395
 | 第 3 章〜第 5 章 | Google Colab                | 3.10.12 | 0.0.292   |
 | 第 6 章〜第 8 章 | AWS Cloud9 (Amazon Linux 2) | 3.10.13 | 0.0.292   |
 
-その他のパッケージの動作確認したバージョンは、各章のディレクトリの requirements.txt を参照してください。
+その他の Python パッケージの動作済みバージョンは、各章のディレクトリの requirements.txt を参照してください。
+
+第 7 章・第 8 章のソースコードのデプロイに使用した Serverless Framework とそのプラグインは、以下のバージョンで動作確認しました。
+
+- serverless@3.35.2
+- serverless-python-requirements@6.0.0
+- serverless-dotenv-plugin@6.0.0
