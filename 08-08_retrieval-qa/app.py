@@ -12,7 +12,7 @@ from langchain.callbacks.base import BaseCallbackHandler
 from langchain.chains import RetrievalQA
 from langchain.chat_models import ChatOpenAI
 from langchain.memory import MomentoChatMessageHistory
-from langchain.schema import HumanMessage, LLMResult, SystemMessage
+from langchain.schema import LLMResult
 from slack_bolt import App
 from slack_bolt.adapter.aws_lambda import SlackRequestHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
