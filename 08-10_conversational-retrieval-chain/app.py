@@ -40,10 +40,9 @@ class SlackStreamingCallbackHandler(BaseCallbackHandler):
     last_send_time = time.time()
     message = ""
 
-    def __init__(self, channel, ts, id_ts):
+    def __init__(self, channel, ts):
         self.channel = channel
         self.ts = ts
-        self.id_ts = id_ts
         self.interval = CHAT_UPDATE_INTERVAL_SEC
         # 投稿を更新した累計回数カウンタ
         self.update_count = 0
@@ -106,7 +105,7 @@ def handle_mention(event, say):
 
     vectorstore = initialize_vectorstore()
 
-    callback = SlackStreamingCallbackHandler(channel=channel, ts=ts, id_ts=id_ts)
+    callback = SlackStreamingCallbackHandler(channel=channel, ts=ts)
     llm = ChatOpenAI(
         model_name=os.environ["OPENAI_API_MODEL"],
         temperature=os.environ["OPENAI_API_TEMPERATURE"],
