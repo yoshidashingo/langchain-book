@@ -16,7 +16,7 @@ CHAT_UPDATE_INTERVAL_SEC = 1
 
 load_dotenv()
 
-# ボットトークンとソケットモードハンドラーを使ってアプリを初期化します
+# ボットトークンを使ってアプリを初期化します
 app = App(
     signing_secret=os.environ["SLACK_SIGNING_SECRET"],
     token=os.environ["SLACK_BOT_TOKEN"],
@@ -91,6 +91,6 @@ def just_ack(ack):
 
 app.event("app_mention")(ack=just_ack, lazy=[handle_mention])
 
-# アプリを起動します
+# ソケットモードハンドラーを使ってアプリを起動します
 if __name__ == "__main__":
     SocketModeHandler(app, os.environ["SLACK_APP_TOKEN"]).start()

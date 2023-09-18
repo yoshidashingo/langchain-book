@@ -6,7 +6,7 @@ from slack_bolt.adapter.socket_mode import SocketModeHandler
 
 load_dotenv()
 
-# ボットトークンとソケットモードハンドラーを使ってアプリを初期化します
+# ボットトークンを使ってアプリを初期化します
 app = App(token=os.environ.get("SLACK_BOT_TOKEN"))
 
 
@@ -17,6 +17,6 @@ def handle_mention(event, say):
     say(thread_ts=thread_ts, text=f"Hello <@{user}>!")
 
 
-# アプリを起動します
+# ソケットモードハンドラーを使ってアプリを起動します
 if __name__ == "__main__":
     SocketModeHandler(app, os.environ["SLACK_APP_TOKEN"]).start()
