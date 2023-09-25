@@ -34,7 +34,7 @@ if __name__ == "__main__":
     raw_docs = loader.load()
     logger.info("Loaded %d documents", len(raw_docs))
 
-    text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
+    text_splitter = CharacterTextSplitter(chunk_size=300, chunk_overlap=30)
     docs = text_splitter.split_documents(raw_docs)
     logger.info("Split %d documents", len(docs))
 
