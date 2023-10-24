@@ -35,6 +35,12 @@ https://www.amazon.co.jp/dp/4297138395
 - serverless-python-requirements@6.0.0
 - serverless-dotenv-plugin@6.0.0
 
+## エラーレポート
+
+書籍内のソースコードがうまく動作しないといったエラーの際は、GitHub の Issue からエラーレポートを作成してください。
+
+https://github.com/yoshidashingo/langchain-book/issues
+
 ## リンク
 
 - [技術評論社](https://gihyo.jp/book/2023/978-4-297-13839-4)
