@@ -41,6 +41,10 @@ https://www.amazon.co.jp/dp/4297138395
 
 https://github.com/yoshidashingo/langchain-book/issues
 
+## 正誤表
+
+[正誤表](./errata.md)
+
 ## リンク
 
 - [技術評論社](https://gihyo.jp/book/2023/978-4-297-13839-4)
