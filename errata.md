@@ -10,12 +10,12 @@
   - 正) AWS Lambda
 - p183 ソースコード 4 行目
   - 正) `self.interval = CHAT_UPDATE_INTERVAL_SEC` を強調 (青字)
-- p250 ~/.bashrc に pyenv を使用するための設定
+- p250 ~/.bashrc に pyenv を使用するための設定を追加
   ```diff
   echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
   echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' \
-  -  >> ~/. bashrc
-  +  >> ~/.bashrc
+  - >> ~/. bashrc
+  + >> ~/.bashrc
   echo 'eval "$(pyenv init -)"' >> ~/.bashrc
   ```
 
