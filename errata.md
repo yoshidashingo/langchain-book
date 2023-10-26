@@ -1,6 +1,6 @@
 # 正誤表
 
-## 初版
+## 初版 第 1 刷
 
 - p104「Vector stores」の項の最後の一文
   - 誤) ElasticSearch
