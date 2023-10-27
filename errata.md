@@ -2,6 +2,9 @@
 
 ## 初版 第 1 刷
 
+- p82 本文 3 行目, 5 行目, p84 最終行
+  - 誤) Recepi
+  - 正) Recipe
 - p104「Vector stores」の項の最後の一文
   - 誤) ElasticSearch
   - 正) Elasticsearch
