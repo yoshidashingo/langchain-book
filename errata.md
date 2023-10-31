@@ -22,6 +22,13 @@
   echo 'eval "$(pyenv init -)"' >> ~/.bashrc
   ```
 
+## 初版 第 2 刷
+
+- p249 コマンド 1 行目
+  - 誤) `git clone git@github.com:os1ma/langchain-book.git`
+  - 正) `git clone git@github.com:<GitHubのユーザー名>/langchain-book.git`
+  - 【補足】このコマンドは「langchain-book」という名前のリポジトリを作成した場合の例です。リポジトリ名が異なる場合は、「langchain-book」の箇所を作成したリポジトリ名に置き換えてください。
+
 ## その他
 
 - 第 6 章
