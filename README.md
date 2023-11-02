@@ -35,9 +35,9 @@ https://www.amazon.co.jp/dp/4297138395
 - serverless-python-requirements@6.0.0
 - serverless-dotenv-plugin@6.0.0
 
-## エラーレポート
+## 書籍の誤り・エラーについて
 
-書籍内のソースコードがうまく動作しないといったエラーの際は、GitHub の Issue からエラーレポートを作成してください。
+書籍の誤り（誤字など）や、発生したエラーについては、GitHub の Issue からご連絡ください。
 
 https://github.com/yoshidashingo/langchain-book/issues
 
