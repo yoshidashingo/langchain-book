@@ -24,6 +24,12 @@
 
 ## 初版 第 2 刷
 
+- p120 図 5.13
+  - 誤) 東京都大阪の天気を教えて
+  - 正) 東京と大阪の天気を教えて
+- p161 7.3「環境設定ファイルを作成する」1 行目
+  - 誤) .env.template
+  - 正) .env.example
 - p249 コマンド 1 行目
   - 誤) `git clone git@github.com:os1ma/langchain-book.git`
   - 正) `git clone git@github.com:<GitHubのユーザー名>/langchain-book.git`
@@ -36,7 +42,7 @@
 
 ## 参考
 
-正誤表の作成の際、以下の書評記事を参考にさせていただきました。ありがとうございました。
+正誤表の作成の際、以下の書評記事やお問い合わせを参考にさせていただきました。ありがとうございました。
 
 - [ChatGPT/LangChain によるチャットシステム構築[実践]入門](https://zenn.dev/yoshii0110/articles/338af3e5123c68)
 - [LLM を組み込んだチャットアプリケーションを写経しながら実装できる「ChatGPT/LangChain によるチャットシステム構築［実践］入門」を読んだ - kakakakakku blog](https://kakakakakku.hatenablog.com/entry/2023/10/16/085525)
