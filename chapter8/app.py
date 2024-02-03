@@ -8,11 +8,14 @@ from typing import Any
 
 from add_document import initialize_vectorstore
 from dotenv import load_dotenv
-from langchain.callbacks.base import BaseCallbackHandler
-from langchain.chains import ConversationalRetrievalChain
-from langchain.chat_models import ChatOpenAI
-from langchain.memory import ConversationBufferMemory, MomentoChatMessageHistory
-from langchain.schema import LLMResult
+from langchain.chains import create_history_aware_retriever
+from langchain_community.chat_message_histories import MomentoChatMessageHistory
+from langchain_core.callbacks import BaseCallbackHandler
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.outputs import LLMResult
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_core.runnables import RunnablePassthrough
+from langchain_openai import ChatOpenAI
 from slack_bolt import App
 from slack_bolt.adapter.aws_lambda import SlackRequestHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
@@ -80,6 +83,10 @@ class SlackStreamingCallbackHandler(BaseCallbackHandler):
         )
 
 
+def format_docs(docs):
+    return "\n\n".join(doc.page_content for doc in docs)
+
+
 # @app.event("app_mention")
 def handle_mention(event, say):
     channel = event["channel"]
@@ -99,32 +106,62 @@ def handle_mention(event, say):
         os.environ["MOMENTO_CACHE"],
         timedelta(hours=int(os.environ["MOMENTO_TTL"])),
     )
-    memory = ConversationBufferMemory(
-        chat_memory=history, memory_key="chat_history", return_messages=True
-    )
 
     vectorstore = initialize_vectorstore()
+    retriever = vectorstore.as_retriever()
 
+    # ここからのconversational_retrieval_chainの実装は公式ドキュメントの以下のページが参考になります。
+    #
+    # https://python.langchain.com/docs/get_started/quickstart#conversation-retrieval-chain
+    # https://python.langchain.com/docs/use_cases/question_answering/chat_history
+
+    # LangChainのcreate_history_aware_retrieverを使い、
+    # 過去の会話履歴を踏まえて質問を改めて言い換えるChainを作成します。
+    rephrase_prompt = ChatPromptTemplate.from_messages(
+        [
+            MessagesPlaceholder(variable_name="chat_history"),
+            ("user", "{input}"),
+            ("user", "上記の会話から、会話に関係する情報を見つけるための検索クエリを生成してください。"),
+        ]
+    )
+    rephrase_llm = ChatOpenAI(
+        model_name=os.environ["OPENAI_API_MODEL"],
+        temperature=os.environ["OPENAI_API_TEMPERATURE"],
+    )
+    rephrase_chain = create_history_aware_retriever(
+        rephrase_llm, retriever, rephrase_prompt
+    )
+
+    # 文脈を踏まえて質問に回答するChainを作成します。
     callback = SlackStreamingCallbackHandler(channel=channel, ts=ts)
-    llm = ChatOpenAI(
+    qa_prompt = ChatPromptTemplate.from_messages(
+        [
+            ("system", "以下の文脈だけを踏まえて質問に回答してください。\n\n{context}"),
+            (MessagesPlaceholder(variable_name="chat_history")),
+            ("user", "{input}"),
+        ]
+    )
+    qa_llm = ChatOpenAI(
         model_name=os.environ["OPENAI_API_MODEL"],
         temperature=os.environ["OPENAI_API_TEMPERATURE"],
         streaming=True,
         callbacks=[callback],
     )
-    condense_question_llm = ChatOpenAI(
-        model_name=os.environ["OPENAI_API_MODEL"],
-        temperature=os.environ["OPENAI_API_TEMPERATURE"],
+    qa_chain = qa_prompt | qa_llm | StrOutputParser()
+
+    # 2つのChainを接続したChainを作成します。
+    conversational_retrieval_chain = (
+        RunnablePassthrough.assign(context=rephrase_chain | format_docs) | qa_chain
     )
 
-    qa_chain = ConversationalRetrievalChain.from_llm(
-        llm=llm,
-        retriever=vectorstore.as_retriever(),
-        memory=memory,
-        condense_question_llm=condense_question_llm,
+    # Chainを実行します。
+    ai_message = conversational_retrieval_chain.invoke(
+        {"input": message, "chat_history": history.messages}
     )
 
-    qa_chain.run(message)
+    # 会話履歴を保存します。
+    history.add_user_message(message)
+    history.add_ai_message(ai_message)
 
 
 def just_ack(ack):
