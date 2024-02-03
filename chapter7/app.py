@@ -7,10 +7,12 @@ from datetime import timedelta
 from typing import Any
 
 from dotenv import load_dotenv
-from langchain.callbacks.base import BaseCallbackHandler
-from langchain.chat_models import ChatOpenAI
-from langchain.memory import MomentoChatMessageHistory
-from langchain.schema import HumanMessage, LLMResult, SystemMessage
+from langchain_community.chat_message_histories import MomentoChatMessageHistory
+from langchain_core.callbacks import BaseCallbackHandler
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.outputs import LLMResult
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_openai import ChatOpenAI
 from slack_bolt import App
 from slack_bolt.adapter.aws_lambda import SlackRequestHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
@@ -98,13 +100,23 @@ def handle_mention(event, say):
         timedelta(hours=int(os.environ["MOMENTO_TTL"])),
     )
 
-    messages = [SystemMessage(content="You are a good assistant.")]
-    messages.extend(history.messages)
-    messages.append(HumanMessage(content=message))
+    prompt = ChatPromptTemplate.from_messages(
+        [
+            ("system", "You are a good assistant."),
+            (MessagesPlaceholder(variable_name="chat_history")),
+            ("user", "{input}"),
+        ]
+    )
 
-    history.add_user_message(message)
+    # ここでは書籍の内容と近い実装になるよう、ストリーミングをCallbackで実装していますが、
+    # LCELではストリーミングの処理をCallbackを使わずに実装することもできます。
+    #
+    # 興味がある方は公式ドキュメントの以下のページを参考にしてください。
+    # https://python.langchain.com/docs/expression_language/streaming
+    # https://python.langchain.com/docs/expression_language/how_to/generators
 
     callback = SlackStreamingCallbackHandler(channel=channel, ts=ts)
+
     llm = ChatOpenAI(
         model_name=os.environ["OPENAI_API_MODEL"],
         temperature=os.environ["OPENAI_API_TEMPERATURE"],
@@ -112,8 +124,12 @@ def handle_mention(event, say):
         callbacks=[callback],
     )
 
-    ai_message = llm(messages)
-    history.add_message(ai_message)
+    chain = prompt | llm | StrOutputParser()
+
+    ai_message = chain.invoke({"input": message, "chat_history": history.messages})
+
+    history.add_user_message(message)
+    history.add_ai_message(ai_message)
 
 
 def just_ack(ack):
