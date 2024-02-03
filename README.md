@@ -4,6 +4,10 @@
 
 https://www.amazon.co.jp/dp/4297138395
 
+> [!IMPORTANT]
+> LangChain v0.1 に対応したソースコードを [langchain-v0.1 ブランチ](https://github.com/yoshidashingo/langchain-book/tree/langchain-v0.1) に追加しました。
+> 詳細は [updates.md](./updates.md) を参照してください。
+
 > [!WARNING]
 > 本書で使用しているパッケージは非常にアップデートが激しいため、バージョンの違いに起因するエラーに遭遇する可能性があります。
 > とくに `pip install` でパッケージをインストールする際は、動作確認済みのバージョンを使用するようにしてください。
@@ -17,7 +21,11 @@ https://www.amazon.co.jp/dp/4297138395
 
 ## 各章のソースコード
 
-| 章                                                                  | Colab                                                                                                                                                                                 |
+> [!NOTE]
+> ここに掲載しているのは、書籍執筆時点のソースコードです。
+> LangChain v0.1 に対応したソースコードについては [updates.md](./updates.md) を参照してください。
+
+| 章                                                                  | ソースコード                                                                                                                                                                          |
 | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 第 3 章 ChatGPT を API から利用するために                           | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/yoshidashingo/langchain-book/blob/main/chapter3/notebook.ipynb) |
 | 第 4 章 LangChain の基礎                                            | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/yoshidashingo/langchain-book/blob/main/chapter4/notebook.ipynb) |
@@ -38,7 +46,7 @@ https://www.amazon.co.jp/dp/4297138395
 | 第 3 章〜第 5 章 | Google Colab                | 3.10.12 | 0.0.292   |
 | 第 6 章〜第 8 章 | AWS Cloud9 (Amazon Linux 2) | 3.10.13 | 0.0.292   |
 
-その他の Python パッケージの動作済みバージョンは、各章のディレクトリの requirements.txt (または requirements-dev.txt) を参照してください。
+その他の Python パッケージの動作確認済みバージョンは、各章のディレクトリの requirements.txt (または requirements-dev.txt) を参照してください。
 
 第 7 章・第 8 章のソースコードのデプロイに使用した Serverless Framework とそのプラグインは、以下のバージョンで動作確認しました。
 
