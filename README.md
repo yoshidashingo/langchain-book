@@ -19,6 +19,9 @@ https://www.amazon.co.jp/dp/4297138395
 > バージョン 4.1.0 は動作することを確認できたので、duckduckgo-search はバージョン 4.1.0 を使用してください。
 > なお、このリポジトリで公開している Google Colab の該当箇所や requirements.txt は更新済みです。
 
+> [!WARNING]
+> 本書の第 5 章で使用している chromadb v0.4.10 を使う際は、pydantic のバージョンに注意する必要があります。具体的な対応方法は [第 5 章の Google Colab](./chapter5/notebook.ipynb) に記載してあります。
+
 ## 各章のソースコード
 
 > [!NOTE]
