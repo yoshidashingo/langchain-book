@@ -32,6 +32,11 @@
 ### Guide
 
 - [prompt engineer guide](https://www.promptingguide.ai/jp/introduction/elements)
+- [4.5 simple sequencial chain](https://www.promptingguide.ai/jp/techniques/cot)
+
+### Langchain
+
+- [!!! chains !!!](https://python.langchain.com/docs/modules/chains)
 
 ### Blog
 

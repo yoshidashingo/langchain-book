@@ -1,11 +1,13 @@
-# Function calling
+# 3.6-function-calling
+
+## Function calling
 
 Function calling は、2023.06.13 に追加された Chat Completions API の新機能です。簡単に言えば、利用可能な関数を LLM に伝えておいて、
 
 LLM に「関数を使いたい」という判断をさせる機能です。
 (LLM が関数を実行する訳ではなく、LLM は「関数を使いたい」という応答を返してくれだけです)
 
-## Flow
+### Flow
 
 処理の流れとしては、
 
