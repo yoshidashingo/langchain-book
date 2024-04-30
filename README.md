@@ -22,6 +22,9 @@ https://www.amazon.co.jp/dp/4297138395
 > [!WARNING]
 > 本書の第 5 章で使用している chromadb v0.4.10 を使う際は、pydantic のバージョンに注意する必要があります。具体的な対応方法は [第 5 章の Google Colab](./chapter5/notebook.ipynb) に記載してあります。
 
+> [!WARNING]
+> 第 8 章の add_document.py 実行時に `ValueError: No active indexes found in your Pinecone project, are you sure you're using the right Pinecone API key and Environment? Please double check your Pinecone dashboard.` が発生する原因と対応方法について [こちらの Issue](https://github.com/yoshidashingo/langchain-book/issues/21) に記載しました。
+
 ## 各章のソースコード
 
 > [!NOTE]
