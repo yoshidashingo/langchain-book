@@ -16,7 +16,7 @@ https://www.amazon.co.jp/dp/4297138395
 > [!WARNING]
 > 本書の一部で使用しているパッケージ「duckduckgo-search」のバージョン 3.8.5 が 2023 年 12 月頃から動作しなくなりました。
 > （使用すると `HTTPError` というエラーが発生します）
-> バージョン 4.1.0 は動作することを確認できたので、duckduckgo-search はバージョン 4.1.0 を使用してください。
+> バージョン 5.3.0 は動作することを確認できたので、duckduckgo-search はバージョン 5.3.0 を使用してください。
 > なお、このリポジトリで公開している Google Colab の該当箇所や requirements.txt は更新済みです。
 
 > [!WARNING]
