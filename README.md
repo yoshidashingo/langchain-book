@@ -25,6 +25,10 @@ https://www.amazon.co.jp/dp/4297138395
 > [!WARNING]
 > 第 8 章の add_document.py 実行時に `ValueError: No active indexes found in your Pinecone project, are you sure you're using the right Pinecone API key and Environment? Please double check your Pinecone dashboard.` が発生する原因と対応方法について [こちらの Issue](https://github.com/yoshidashingo/langchain-book/issues/21) に記載しました。
 
+> [!WARNING]
+> 2024 年 7 月末に、AWS Cloud9 の新規利用が終了されました。
+> Cloud9 の代替となる開発環境を構築する手順を [こちらのリポジトリ](https://github.com/os1ma/cloud9-alternative) にまとめたので、Cloud9 の環境を作成できない場合は参照してください。
+
 ## 各章のソースコード
 
 > [!NOTE]
