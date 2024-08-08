@@ -4,6 +4,8 @@
 
 https://www.amazon.co.jp/dp/4297138395
 
+![cover](assets/cover.jpg)
+
 > [!IMPORTANT]
 > LangChain v0.1 に対応したソースコードを [langchain-v0.1 ブランチ](https://github.com/yoshidashingo/langchain-book/tree/langchain-v0.1) に追加しました。
 > 詳細は [updates.md](./updates.md) を参照してください。
