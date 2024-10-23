@@ -31,6 +31,20 @@ https://www.amazon.co.jp/dp/4297138395
 > 2024 年 7 月末に、AWS Cloud9 の新規利用が終了されました。
 > Cloud9 の代替となる開発環境を構築する手順を [こちらのリポジトリ](https://github.com/os1ma/cloud9-alternative) にまとめたので、Cloud9 の環境を作成できない場合は参照してください。
 
+> [!WARNING]
+> Cloud9 環境のアップデートにより、Streamlit の実行時に `ModuleNotFoundError: No module named '_ctypes'` が発生する場合があるようです。
+> その場合、以下の手順で対応してください。
+> 1. pyenv でインストールした Python のバージョンを確認する
+> ```
+> pyenv versions
+> ```
+> 2. Python をアンインストールし、libffi-devel をインストールしたうえで、Python をインストールし直す
+> ```
+> pyenv uninstall -f <pyenv versionsで確認したPythonのバージョン。3.10.15など>
+> sudo yum install -y libffi-devel
+> pyenv install 3.10
+> ```
+
 ## 各章のソースコード
 
 > [!NOTE]
