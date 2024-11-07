@@ -20,6 +20,8 @@ https://www.amazon.co.jp/dp/4297138395
 > （使用すると `HTTPError` というエラーが発生します）
 > バージョン 5.3.0 は動作することを確認できたので、duckduckgo-search はバージョン 5.3.0 を使用してください。
 > なお、このリポジトリで公開している Google Colab の該当箇所や requirements.txt は更新済みです。
+> もしもバージョン 5.3.0 でもエラーになる場合、duckduckgo-search のさらに新しいバージョンを使用することで解決する可能性があります。
+> [duckduckgo-search のリリース履歴](https://pypi.org/project/duckduckgo-search/#history) から新しいバージョンを確認してインストールし、うまく動作するか試してみてください。
 
 > [!WARNING]
 > 本書の第 5 章で使用している chromadb v0.4.10 を使う際は、pydantic のバージョンに注意する必要があります。具体的な対応方法は [第 5 章の Google Colab](./chapter5/notebook.ipynb) に記載してあります。
